@@ -46,7 +46,7 @@ const Blog = () => {
         {/* Featured post */}
         <section className="container mx-auto px-6 mb-16">
           <Link
-            to={`/blog/${BLOG_POSTS[0].slug}`}
+            to={`/blogs/${BLOG_POSTS[0].slug}`}
             className="group block rounded-3xl border border-border bg-card hover:border-primary/40 transition-all duration-300 overflow-hidden"
           >
             <div className="grid md:grid-cols-2 gap-8 p-8 md:p-12">
@@ -100,7 +100,7 @@ const Blog = () => {
             {BLOG_POSTS.map((post) => (
               <Link
                 key={post.slug}
-                to={`/blog/${post.slug}`}
+                to={`/blogs/${post.slug}`}
                 className="group flex flex-col rounded-2xl border border-border bg-card hover:border-primary/40 hover:-translate-y-1 transition-all duration-300 overflow-hidden"
               >
                 <div className="relative aspect-[16/9] bg-gradient-to-br from-primary/15 via-primary/5 to-transparent border-b border-border flex items-center justify-center overflow-hidden">

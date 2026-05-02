@@ -626,7 +626,6 @@ export default function AboutBridgePage() {
         )}
       </div>
 
-
       <Footer />
     </div>
   );
