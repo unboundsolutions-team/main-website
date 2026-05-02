@@ -1,0 +1,393 @@
+/* Font loaded via index.html preload for better LCP */
+
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Unbound Solutions Design System — Dark Mode Only */
+
+@layer base {
+  :root {
+    /* ── Brand Anchors ─────────────────────────────────────────────── */
+    /* #1e5198 → deep navy   |   #7cd1ff → sky blue                   */
+
+    /* Dark canvas — deep navy background, sky blue accents */
+    --background: 218 55% 9%;
+    --foreground: 210 30% 95%;
+
+    --card: 218 48% 13%;
+    --card-foreground: 210 30% 95%;
+
+    --popover: 218 48% 13%;
+    --popover-foreground: 210 30% 95%;
+
+    /* Primary = Sky #7cd1ff (bright CTA on dark) */
+    --primary: 200 100% 74%;
+    --primary-foreground: 218 55% 9%;
+
+    /* Secondary surface */
+    --secondary: 218 42% 18%;
+    --secondary-foreground: 210 25% 90%;
+
+    /* Muted */
+    --muted: 218 38% 17%;
+    --muted-foreground: 214 18% 55%;
+
+    /* Accent = lighter navy */
+    --accent: 215 67% 55%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 4 72% 58%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 218 35% 20%;
+    --input: 218 35% 20%;
+    --ring: 200 100% 74%;
+
+    /* Division-specific colors */
+    --solutions: 215 67% 36%;
+    --studios:   200 100% 74%;
+    --services:  208 80% 54%;
+
+    /* ── Gradients ──────────────────────────────────────────────────── */
+    --gradient-primary: linear-gradient(135deg, hsl(200 100% 80%) 0%, hsl(215 67% 50%) 100%);
+    --gradient-hero:    linear-gradient(180deg, hsl(218 55% 9%)  0%, hsl(218 48% 11%) 100%);
+    --gradient-card:    linear-gradient(160deg, hsl(218 48% 13%) 0%, hsl(218 52% 10%) 100%);
+    --gradient-mesh:
+      radial-gradient(ellipse at 15% 10%,  hsl(200 100% 74% / 0.18) 0px, transparent 55%),
+      radial-gradient(ellipse at 85% 0%,   hsl(215 67% 50% / 0.14) 0px, transparent 50%),
+      radial-gradient(ellipse at 50% 90%,  hsl(200 100% 74% / 0.10) 0px, transparent 55%),
+      radial-gradient(ellipse at 0%  60%,  hsl(215 67% 36% / 0.08) 0px, transparent 45%);
+
+    /* ── Shadows ────────────────────────────────────────────────────── */
+    --shadow-soft:     0 2px 8px    hsl(218 60% 4% / 0.35);
+    --shadow-card:     0 8px 32px  -8px hsl(218 60% 4% / 0.55);
+    --shadow-elevated: 0 24px 56px -16px hsl(218 60% 4% / 0.65);
+    --shadow-glow:     0 0 56px hsl(200 100% 74% / 0.24);
+    --shadow-navy:     0 0 48px hsl(215 67% 50% / 0.30);
+
+    /* ── Charts ─────────────────────────────────────────────────────── */
+    --chart-1: 200 100% 74%;
+    --chart-2: 215 67% 50%;
+    --chart-3: 208 80% 54%;
+    --chart-4: 195 70% 62%;
+    --chart-5: 218 55% 30%;
+
+    /* ── Sidebar ────────────────────────────────────────────────────── */
+    --sidebar: 218 55% 9%;
+    --sidebar-foreground: 210 30% 95%;
+    --sidebar-primary: 200 100% 74%;
+    --sidebar-primary-foreground: 218 55% 9%;
+    --sidebar-accent: 218 42% 18%;
+    --sidebar-accent-foreground: 210 25% 90%;
+    --sidebar-border: 218 35% 20%;
+    --sidebar-ring: 200 100% 74%;
+    --sidebar-background: 218 48% 13%;
+
+    /* ── Typography ─────────────────────────────────────────────────── */
+    --font-sans: 'Outfit', system-ui, sans-serif;
+    --font-body: 'DM Sans', system-ui, sans-serif;
+
+    --spacing: 0.25rem;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   BASE RESETS
+═══════════════════════════════════════════════════════════════════ */
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    color-scheme: dark;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: var(--font-body);
+    background-image: var(--gradient-mesh);
+    background-attachment: fixed;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-sans);
+    @apply font-semibold tracking-tight;
+  }
+
+  ::selection {
+    background: hsl(200 100% 74% / 0.25);
+    color: hsl(var(--foreground));
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   COMPONENTS
+═══════════════════════════════════════════════════════════════════ */
+@layer components {
+
+  /* ── Gradient helpers ─────────────────────────────────────────── */
+  .gradient-text {
+    @apply bg-clip-text text-transparent;
+    background-image: var(--gradient-primary);
+  }
+
+  .gradient-bg {
+    background-image: var(--gradient-primary);
+  }
+
+  .mesh-bg {
+    background-image: var(--gradient-mesh);
+  }
+
+  /* ── Glow / depth ─────────────────────────────────────────────── */
+  .glow-effect {
+    box-shadow: var(--shadow-glow);
+  }
+
+  .glow-navy {
+    box-shadow: var(--shadow-navy);
+  }
+
+  /* ── Glass card ──────────────────────────────────────────────── */
+  .glass-card {
+    @apply backdrop-blur-2xl border rounded-2xl;
+    border-color: hsl(200 100% 74% / 0.14);
+    background: hsl(var(--card) / 0.80);
+    box-shadow: var(--shadow-card),
+                inset 0 1px 0 hsl(200 100% 74% / 0.10);
+  }
+
+  /* ── Card hover lift ──────────────────────────────────────────── */
+  .card-hover {
+    @apply transition-all duration-500 ease-out;
+  }
+
+  .card-hover:hover {
+    transform: translateY(-6px) scale(1.015);
+    box-shadow: var(--shadow-elevated), var(--shadow-glow);
+  }
+
+  /* ── Primary button — sky→navy pill ──────────────────────────── */
+  .btn-primary {
+    @apply px-8 py-4 rounded-full font-semibold tracking-wide relative overflow-hidden;
+    font-family: var(--font-sans);
+    background-image: var(--gradient-primary);
+    color: hsl(218 55% 9%);
+    box-shadow: var(--shadow-soft), 0 4px 18px hsl(215 67% 36% / 0.35);
+    @apply transition-all duration-300;
+  }
+
+  .btn-primary::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, hsl(0 0% 100% / 0.20) 0%, transparent 60%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .btn-primary:hover::before { opacity: 1; }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-glow), 0 10px 28px hsl(215 67% 36% / 0.50);
+  }
+
+  .btn-primary:active { transform: translateY(0); }
+
+  /* ── Secondary button ────────────────────────────────────────── */
+  .btn-secondary {
+    @apply px-8 py-4 rounded-full font-semibold tracking-wide bg-transparent text-foreground;
+    @apply transition-all duration-300;
+    border: 2px solid hsl(200 100% 74% / 0.25);
+    font-family: var(--font-sans);
+  }
+
+  .btn-secondary:hover {
+    border-color: hsl(200 100% 74% / 0.65);
+    background: hsl(200 100% 74% / 0.08);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px hsl(200 100% 74% / 0.18);
+  }
+
+  /* ── Section badge ───────────────────────────────────────────── */
+  .section-badge {
+    @apply inline-flex items-center gap-2 px-5 py-2.5 rounded-full;
+    @apply text-sm font-semibold uppercase tracking-widest;
+    background: linear-gradient(135deg,
+      hsl(200 100% 74% / 0.12) 0%,
+      hsl(215 67% 50% / 0.08) 100%);
+    color: hsl(200 100% 74%);
+    border: 1px solid hsl(200 100% 74% / 0.22);
+    font-family: var(--font-sans);
+  }
+
+  /* ── Division color scopes ───────────────────────────────────── */
+  .division-solutions { --division-color: var(--solutions); }
+  .division-studios   { --division-color: var(--studios);   }
+  .division-services  { --division-color: var(--services);  }
+
+  /* ── Input field ─────────────────────────────────────────────── */
+  .input-field {
+    @apply w-full px-5 py-4 rounded-xl bg-card border-2 border-border;
+    @apply placeholder:text-muted-foreground transition-all duration-300;
+    box-shadow: var(--shadow-soft);
+    font-family: var(--font-body);
+  }
+
+  .input-field:focus {
+    outline: none;
+    border-color: hsl(200 100% 74% / 0.55);
+    box-shadow: var(--shadow-card), 0 0 0 4px hsl(200 100% 74% / 0.10);
+  }
+
+  /* ── Decorative line ─────────────────────────────────────────── */
+  .decorative-line {
+    @apply h-px w-full;
+    background: linear-gradient(90deg,
+      transparent,
+      hsl(200 100% 74% / 0.35),
+      hsl(215 67% 50% / 0.25),
+      transparent);
+  }
+
+  /* ── Animated underline link ─────────────────────────────────── */
+  .link-underline { @apply relative; }
+
+  .link-underline::after {
+    content: '';
+    @apply absolute bottom-0 left-0 w-full h-0.5 origin-left scale-x-0 transition-transform duration-300;
+    background-image: var(--gradient-primary);
+  }
+
+  .link-underline:hover::after { @apply scale-x-100; }
+
+  /* ── Sky accent stripe ───────────────────────────────────────── */
+  .sky-stripe { position: relative; }
+
+  .sky-stripe::before {
+    content: '';
+    position: absolute;
+    inset-block: 0;
+    left: 0;
+    width: 3px;
+    border-radius: 0 2px 2px 0;
+    background-image: var(--gradient-primary);
+  }
+
+  /* ── Gradient border card ────────────────────────────────────── */
+  .gradient-border {
+    position: relative;
+    border-radius: 1rem;
+    background: hsl(var(--card));
+  }
+
+  .gradient-border::before {
+    content: '';
+    position: absolute;
+    inset: -1.5px;
+    border-radius: inherit;
+    background-image: var(--gradient-primary);
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.35s ease;
+  }
+
+  .gradient-border:hover::before { opacity: 1; }
+
+  /* ── Metric callout ──────────────────────────────────────────── */
+  .metric-callout {
+    @apply text-4xl font-bold tracking-tight;
+    font-family: var(--font-sans);
+    background-image: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   UTILITIES
+═══════════════════════════════════════════════════════════════════ */
+@layer utilities {
+  .text-balance { text-wrap: balance; }
+
+  .animate-float      { animation: float        6s   ease-in-out infinite; }
+  .animate-pulse-glow { animation: pulse-glow   3s   ease-in-out infinite; }
+  .animate-slide-up   { animation: slide-up     0.6s ease-out    forwards; }
+  .animate-spin-slow  { animation: spin-slow    12s  linear      infinite; }
+
+  .shimmer {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .shimmer::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 55%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, hsl(200 100% 74% / 0.12), transparent);
+    animation: shimmer-move 3.5s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px);   }
+    50%       { transform: translateY(-16px); }
+  }
+
+  @keyframes pulse-glow {
+    0%, 100% { opacity: 0.55; transform: scale(1);    }
+    50%       { opacity: 1;    transform: scale(1.03); }
+  }
+
+  @keyframes slide-up {
+    from { opacity: 0; transform: translateY(28px); }
+    to   { opacity: 1; transform: translateY(0);    }
+  }
+
+  @keyframes shimmer-move {
+    0%        { left: -100%; }
+    50%, 100% { left: 110%;  }
+  }
+
+  @keyframes text-reveal {
+    0%   { clip-path: inset(0 100% 0 0); }
+    100% { clip-path: inset(0 0%   0 0); }
+  }
+
+  @keyframes spin-slow {
+    from { transform: rotate(0deg);   }
+    to   { transform: rotate(360deg); }
+  }
+
+  .noise-overlay { position: relative; }
+
+  .noise-overlay::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: 0.025;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .grain { position: relative; }
+
+  .grain::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='turbulence' baseFrequency='0.7'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23grain)'/%3E%3C/svg%3E");
+    opacity: 0.012;
+    pointer-events: none;
+  }
+}
