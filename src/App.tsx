@@ -30,7 +30,7 @@ const App = () => (
           <Route path="/blogs/:id" element={<BlogDetail />} />
 
           <Route path="/admin/login" element={<Login />} />
-          <Route path="/blogs/german-clients" element={<DSGVOBlog />} />
+          <Route path="/blogs/german-clients-bridge" element={<DSGVOBlog />} />
           <Route path="/blogs/dsgvo-compliant-websites" element={<AboutBridgePage />} />
 
           <Route
