@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import Navbar from "@/components/Navbar";
 
 /* ─── Types ─────────────────────────────────────────── */
 interface ChecklistItem {
@@ -327,27 +328,7 @@ export default function DSGVOBlog() {
       }} />
 
       {/* Navbar */}
-      <nav style={{
-        position: "fixed", top: 0, left: 0, right: 0, zIndex: 100,
-        padding: "1.25rem 2rem", display: "flex", alignItems: "center", justifyContent: "space-between",
-        backdropFilter: "blur(20px)", background: "hsl(218,55%,9%,0.7)",
-        borderBottom: "1px solid hsl(218,35%,20%,0.5)",
-      }}>
-        <span style={{ fontFamily: "'Outfit',sans-serif", fontSize: "1.25rem", fontWeight: 800, ...S.gradientText }}>
-          Unbound Solutions
-        </span>
-        <span style={{
-          display: "inline-flex", alignItems: "center", gap: "0.5rem",
-          padding: "0.4rem 1rem", borderRadius: 999,
-          fontSize: "0.7rem", fontWeight: 600, textTransform: "uppercase" as const, letterSpacing: "0.1em",
-          background: "linear-gradient(135deg, hsl(200,100%,74%,0.12) 0%, hsl(215,67%,50%,0.08) 100%)",
-          color: "hsl(200,100%,74%)", border: "1px solid hsl(200,100%,74%,0.22)",
-          fontFamily: "'Outfit',sans-serif",
-        }}>
-          <span style={{ width: 6, height: 6, borderRadius: "50%", background: "hsl(200,100%,74%)", animation: "pulse 2s infinite" }} />
-          Web Development &amp; Compliance
-        </span>
-      </nav>
+      <Navbar />
 
       {/* Hero */}
       <section id="hero" style={{
