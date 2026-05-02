@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 
 /* ─── Types ─────────────────────────────────────────── */
 interface ChecklistItem {
@@ -587,11 +588,8 @@ export default function DSGVOBlog() {
         )}
       </div>
 
-      {/* Footer */}
-      <footer style={{ marginTop: "6rem", padding: "2rem", borderTop: "1px solid hsl(218,35%,18%)", textAlign: "center" as const }}>
-        <div style={{ fontFamily: "'Outfit',sans-serif", fontSize: "1.1rem", fontWeight: 800, ...S.gradientText, marginBottom: "0.5rem" }}>Unbound Solutions</div>
-        <div style={{ fontSize: "0.8rem", color: "hsl(214,18%,40%)" }}>India & Germany · Web Development · IT Solutions · DSGVO Compliance · unboundsolutions.in</div>
-      </footer>
+
+      <Footer />
     </div>
   );
 }

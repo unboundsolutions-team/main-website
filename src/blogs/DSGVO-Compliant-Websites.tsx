@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 
 /* ─── Types ──────────────────────────────────────────── */
 interface PillarCard {
@@ -625,11 +626,8 @@ export default function AboutBridgePage() {
         )}
       </div>
 
-      {/* Footer */}
-      <footer style={{ marginTop: "4rem", padding: "2rem", borderTop: "1px solid hsl(218,35%,18%)", textAlign: "center" }}>
-        <div style={{ fontFamily: "'Outfit',sans-serif", fontSize: "1.1rem", fontWeight: 800, ...gradientText, marginBottom: "0.5rem" }}>Unbound Solutions</div>
-        <div style={{ fontSize: "0.8rem", color: "hsl(214,18%,38%)" }}>India &amp; Germany · Web Development · IT Solutions · DSGVO Compliance · unboundsolutions.in</div>
-      </footer>
+
+      <Footer />
     </div>
   );
 }

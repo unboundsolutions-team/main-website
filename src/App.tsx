@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Blogs from "./pages/Blogs";
+import Blog from "./pages/Blog";
 import BlogDetail from "./pages/BlogDetails";
 import Login from "./admin/Login";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -25,7 +26,7 @@ const App = () => (
         <Routes>
 
           <Route path="/" element={<Index />} />
-          <Route path="/blogs" element={<Blogs />} />
+          <Route path="/blogs" element={<Blog />} />
           <Route path="/blogs/:id" element={<BlogDetail />} />
 
           <Route path="/admin/login" element={<Login />} />
