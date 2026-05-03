@@ -39,7 +39,7 @@ const Footer = () => {
   return (
     <footer className="py-16 border-t border-border bg-card">
       <div className="container mx-auto px-6">
-        <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-12 mb-12">
+        <div className="grid md:grid-cols-2 custom-grid-6 lg:grid-cols-5 gap-12 mb-12">
           {/* Brand */}
           <div className="lg:col-span-2">
             <a href="#home" className="inline-block mb-6">

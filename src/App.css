@@ -97,3 +97,9 @@
   color: hsl(210,20%,70%);
   margin: 20px 0;
 }
+
+@media (min-width: 1024px) {
+    .custom-grid-6 {
+        grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
+    }
+}
