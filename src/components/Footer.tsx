@@ -16,6 +16,11 @@ const Footer = () => {
       { label: "Brand Design", href: "#services" },
       { label: "Cybersecurity", href: "#services" },
     ],
+    products: [
+      { label: "Shopify Auditor", href: "https://rupeleaks.unboundsolutions.in/" },
+      { label: "PDF Tools", href: "https://pdftools.unboundsolutions.in/" },
+      { label: "SIP Calculator", href: "https://sip.unboundsolutions.in/" },
+    ],
     company: [
       { label: "About Us", href: "#about" },
       { label: "Contact", href: "#contact" },
@@ -92,6 +97,22 @@ const Footer = () => {
             </ul>
           </div>
 
+          {/* Products */}
+          <div>
+            <h4 className="font-semibold mb-4">Products</h4>
+            <ul className="space-y-3">
+              {footerLinks.products.map((link) => (
+                <li key={link.label}>
+                  <a
+                    href={link.href}
+                    className="text-muted-foreground hover:text-primary transition-colors text-sm"
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
           {/* Company */}
           <div>
             <h4 className="font-semibold mb-4">Company</h4>
