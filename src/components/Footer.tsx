@@ -1,31 +1,32 @@
 import { Linkedin, Twitter, Instagram, Github } from "lucide-react";
-import unboundLogo from "@/assets/logo-short.png";
+import { Link } from "react-router-dom";
+import unboundLogo from "@/assets/unbound-logo.png";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   const footerLinks = {
     divisions: [
-      { label: "Unbound Solutions", href: "#divisions" },
-      { label: "Unbound Studios", href: "#divisions" },
-      { label: "Unbound Services", href: "#divisions" },
+      { label: "Unbound Solutions", href: "/#divisions" },
+      { label: "Unbound Studios", href: "/#divisions" },
+      { label: "Unbound Services", href: "/#divisions" },
     ],
     services: [
-      { label: "Web Development", href: "#services" },
-      { label: "E-Commerce", href: "#services" },
-      { label: "Brand Design", href: "#services" },
-      { label: "Cybersecurity", href: "#services" },
+      { label: "Web Development", href: "/#services" },
+      { label: "E-Commerce", href: "/#services" },
+      { label: "Brand Design", href: "/#services" },
+      { label: "Cybersecurity", href: "/#services" },
     ],
     products: [
-      { label: "Shopify Auditor", href: "https://rupeleaks.unboundsolutions.in/" },
-      { label: "PDF Tools", href: "https://pdftools.unboundsolutions.in/" },
-      { label: "SIP Calculator", href: "https://sip.unboundsolutions.in/" },
+      { label: "Shopify Auditor", href: "/#products", external: false },
+      { label: "PDF Tools", href: "/#products", external: false },
+      { label: "SIP Calculator", href: "/#products", external: false },
     ],
     company: [
-      { label: "About Us", href: "#about" },
-      { label: "Contact", href: "#contact" },
-      { label: "Careers", href: "#" },
-      { label: "Blog", href: "#" },
+      { label: "About me", href: "/#about" },
+      { label: "Contact", href: "/#contact" },
+      { label: "Careers", href: "/#" },
+      { label: "Blog", href: "/blog" },
     ],
   };
 
@@ -36,17 +37,34 @@ const Footer = () => {
     { icon: Github, href: "#", label: "GitHub" },
   ];
 
+  const renderLink = (link: { label: string; href: string }) =>
+    link.href.startsWith("/") && !link.href.includes("#") ? (
+      <Link
+        to={link.href}
+        className="text-muted-foreground hover:text-primary transition-colors text-sm"
+      >
+        {link.label}
+      </Link>
+    ) : (
+      <a
+        href={link.href}
+        className="text-muted-foreground hover:text-primary transition-colors text-sm"
+      >
+        {link.label}
+      </a>
+    );
+
   return (
     <footer className="py-16 border-t border-border bg-card">
       <div className="container mx-auto px-6">
-        <div className="grid md:grid-cols-2 custom-grid-6 lg:grid-cols-5 gap-12 mb-12">
+        <div className="grid md:grid-cols-2 lg:grid-cols-6 gap-12 mb-12">
           {/* Brand */}
           <div className="lg:col-span-2">
-            <a href="#home" className="inline-block mb-6">
+            <Link to="/" className="inline-block mb-6">
               <img src={unboundLogo} alt="Unbound" className="h-12 w-auto" />
-            </a>
+            </Link>
             <p className="text-muted-foreground max-w-sm mb-6">
-              Full-service web development agency specializing in custom websites, Shopify stores, 
+              Full-service web development agency specializing in custom websites, Shopify stores,
               UI/UX design, and IT solutions. Trusted by startups and enterprises worldwide.
             </p>
             <div className="flex gap-3">
@@ -68,14 +86,7 @@ const Footer = () => {
             <h4 className="font-semibold mb-4">Divisions</h4>
             <ul className="space-y-3">
               {footerLinks.divisions.map((link) => (
-                <li key={link.label}>
-                  <a
-                    href={link.href}
-                    className="text-muted-foreground hover:text-primary transition-colors text-sm"
-                  >
-                    {link.label}
-                  </a>
-                </li>
+                <li key={link.label}>{renderLink(link)}</li>
               ))}
             </ul>
           </div>
@@ -85,47 +96,27 @@ const Footer = () => {
             <h4 className="font-semibold mb-4">Services</h4>
             <ul className="space-y-3">
               {footerLinks.services.map((link) => (
-                <li key={link.label}>
-                  <a
-                    href={link.href}
-                    className="text-muted-foreground hover:text-primary transition-colors text-sm"
-                  >
-                    {link.label}
-                  </a>
-                </li>
+                <li key={link.label}>{renderLink(link)}</li>
               ))}
             </ul>
           </div>
 
-          {/* Products */}
+          {/* Our Products */}
           <div>
-            <h4 className="font-semibold mb-4">Products</h4>
+            <h4 className="font-semibold mb-4">Our Products</h4>
             <ul className="space-y-3">
               {footerLinks.products.map((link) => (
-                <li key={link.label}>
-                  <a
-                    href={link.href}
-                    className="text-muted-foreground hover:text-primary transition-colors text-sm"
-                  >
-                    {link.label}
-                  </a>
-                </li>
+                <li key={link.label}>{renderLink(link)}</li>
               ))}
             </ul>
           </div>
+
           {/* Company */}
           <div>
             <h4 className="font-semibold mb-4">Company</h4>
             <ul className="space-y-3">
               {footerLinks.company.map((link) => (
-                <li key={link.label}>
-                  <a
-                    href={link.href}
-                    className="text-muted-foreground hover:text-primary transition-colors text-sm"
-                  >
-                    {link.label}
-                  </a>
-                </li>
+                <li key={link.label}>{renderLink(link)}</li>
               ))}
             </ul>
           </div>
@@ -137,18 +128,24 @@ const Footer = () => {
             © {currentYear} Unbound. All rights reserved.
           </p>
           <div className="flex gap-6">
-            <a
-              href="#"
+            <Link
+              to="/privacy-policy"
               className="text-sm text-muted-foreground hover:text-primary transition-colors"
             >
               Privacy Policy
-            </a>
-            <a
-              href="#"
+            </Link>
+            <Link
+              to="/terms-of-service"
               className="text-sm text-muted-foreground hover:text-primary transition-colors"
             >
               Terms of Service
-            </a>
+            </Link>
+            <button
+              onClick={() => window.dispatchEvent(new Event("open-cookie-settings"))}
+              className="text-sm text-muted-foreground hover:text-primary transition-colors"
+            >
+              Cookie Settings
+            </button>
           </div>
         </div>
       </div>
