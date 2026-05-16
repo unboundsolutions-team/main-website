@@ -1,11 +1,25 @@
 import { Link } from "react-router-dom";
-import { ArrowRight, Calendar, Clock, User } from "lucide-react";
+import { ArrowRight, Calendar, Clock, User, Loader2 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { BLOG_POSTS } from "@/data/blogs";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
+
+interface ListPost {
+  slug: string;
+  title: string;
+  excerpt: string;
+  category: string;
+  readTime: string;
+  date: string;
+  author: string;
+  tags: string[];
+}
 
 const Blog = () => {
+  const [posts, setPosts] = useState<ListPost[]>([]);
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     document.title = "Blog | Unbound Solutions — Insights on Web, Compliance & Design";
     const meta =
@@ -17,6 +31,38 @@ const Blog = () => {
     );
     if (!meta.parentElement) document.head.appendChild(meta);
   }, []);
+
+  useEffect(() => {
+    (async () => {
+      const { data, error } = await supabase
+        .from("blogs")
+        .select("slug, title, excerpt, category, read_time, author, tags, created_at")
+        .eq("published", true)
+        .order("created_at", { ascending: false });
+
+      if (!error && data) {
+        setPosts(
+          data.map((d) => ({
+            slug: d.slug,
+            title: d.title,
+            excerpt: d.excerpt,
+            category: d.category,
+            readTime: d.read_time,
+            date: new Date(d.created_at).toLocaleDateString("en-US", {
+              month: "long",
+              year: "numeric",
+            }),
+            author: d.author,
+            tags: d.tags ?? [],
+          })),
+        );
+      }
+      setLoading(false);
+    })();
+  }, []);
+
+  const featured = posts[0];
+  const rest = posts.slice(1);
 
   return (
     <div className="min-h-screen bg-background">
@@ -43,102 +89,116 @@ const Blog = () => {
           </div>
         </section>
 
+        {loading && (
+          <div className="container mx-auto px-6 mb-8 text-center">
+            <Loader2 className="w-5 h-5 animate-spin inline text-primary" />
+          </div>
+        )}
+
+        {!loading && posts.length === 0 && (
+          <div className="container mx-auto px-6 mb-8 text-center text-muted-foreground">
+            No articles published yet — check back soon.
+          </div>
+        )}
+
         {/* Featured post */}
-        <section className="container mx-auto px-6 mb-16">
-          <Link
-            to={`/blogs/${BLOG_POSTS[0].slug}`}
-            className="group block rounded-3xl border border-border bg-card hover:border-primary/40 transition-all duration-300 overflow-hidden"
-          >
-            <div className="grid md:grid-cols-2 gap-8 p-8 md:p-12">
-              <div className="relative aspect-[4/3] md:aspect-auto rounded-2xl bg-gradient-to-br from-primary/20 via-primary/5 to-transparent border border-primary/20 flex items-center justify-center overflow-hidden">
-                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,hsl(var(--primary)/0.25),transparent_60%)]" />
-                <span className="relative text-7xl md:text-8xl font-black text-primary/30 tracking-tight">
-                  DSGVO
-                </span>
-              </div>
-              <div className="flex flex-col justify-center">
-                <div className="flex items-center gap-3 text-xs font-semibold uppercase tracking-wider text-primary mb-4">
-                  <span>Featured</span>
-                  <span className="text-muted-foreground">•</span>
-                  <span className="text-muted-foreground">{BLOG_POSTS[0].category}</span>
-                </div>
-                <h2 className="text-2xl md:text-3xl font-bold mb-4 group-hover:text-primary transition-colors">
-                  {BLOG_POSTS[0].title}
-                </h2>
-                <p className="text-muted-foreground leading-relaxed mb-6">
-                  {BLOG_POSTS[0].excerpt}
-                </p>
-                <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground mb-6">
-                  <span className="flex items-center gap-1.5">
-                    <User className="w-4 h-4" /> {BLOG_POSTS[0].author}
-                  </span>
-                  <span className="flex items-center gap-1.5">
-                    <Calendar className="w-4 h-4" /> {BLOG_POSTS[0].date}
-                  </span>
-                  <span className="flex items-center gap-1.5">
-                    <Clock className="w-4 h-4" /> {BLOG_POSTS[0].readTime}
+        {featured && (
+          <section className="container mx-auto px-6 mb-16">
+            <Link
+              to={`/blog/${featured.slug}`}
+              className="group block rounded-3xl border border-border bg-card hover:border-primary/40 transition-all duration-300 overflow-hidden"
+            >
+              <div className="grid md:grid-cols-2 gap-8 p-8 md:p-12">
+                <div className="relative aspect-[4/3] md:aspect-auto rounded-2xl bg-gradient-to-br from-primary/20 via-primary/5 to-transparent border border-primary/20 flex items-center justify-center overflow-hidden">
+                  <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,hsl(var(--primary)/0.25),transparent_60%)]" />
+                  <span className="relative text-5xl md:text-6xl font-black text-primary/30 tracking-tight px-6 text-center">
+                    {featured.category}
                   </span>
                 </div>
-                <span className="inline-flex items-center gap-2 text-primary font-semibold group-hover:gap-3 transition-all">
-                  Read article <ArrowRight className="w-4 h-4" />
-                </span>
+                <div className="flex flex-col justify-center">
+                  <div className="flex items-center gap-3 text-xs font-semibold uppercase tracking-wider text-primary mb-4">
+                    <span>Featured</span>
+                    <span className="text-muted-foreground">•</span>
+                    <span className="text-muted-foreground">{featured.category}</span>
+                  </div>
+                  <h2 className="text-2xl md:text-3xl font-bold mb-4 group-hover:text-primary transition-colors">
+                    {featured.title}
+                  </h2>
+                  <p className="text-muted-foreground leading-relaxed mb-6">{featured.excerpt}</p>
+                  <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground mb-6">
+                    <span className="flex items-center gap-1.5">
+                      <User className="w-4 h-4" /> {featured.author}
+                    </span>
+                    <span className="flex items-center gap-1.5">
+                      <Calendar className="w-4 h-4" /> {featured.date}
+                    </span>
+                    <span className="flex items-center gap-1.5">
+                      <Clock className="w-4 h-4" /> {featured.readTime}
+                    </span>
+                  </div>
+                  <span className="inline-flex items-center gap-2 text-primary font-semibold group-hover:gap-3 transition-all">
+                    Read article <ArrowRight className="w-4 h-4" />
+                  </span>
+                </div>
               </div>
-            </div>
-          </Link>
-        </section>
+            </Link>
+          </section>
+        )}
 
         {/* All posts */}
-        <section className="container mx-auto px-6">
-          <div className="flex items-end justify-between mb-8">
-            <h2 className="text-2xl md:text-3xl font-bold">All articles</h2>
-            <span className="text-sm text-muted-foreground">
-              {BLOG_POSTS.length} {BLOG_POSTS.length === 1 ? "post" : "posts"}
-            </span>
-          </div>
+        {rest.length > 0 && (
+          <section className="container mx-auto px-6">
+            <div className="flex items-end justify-between mb-8">
+              <h2 className="text-2xl md:text-3xl font-bold">All articles</h2>
+              <span className="text-sm text-muted-foreground">
+                {posts.length} {posts.length === 1 ? "post" : "posts"}
+              </span>
+            </div>
 
-          <div className="grid md:grid-cols-2 gap-6">
-            {BLOG_POSTS.map((post) => (
-              <Link
-                key={post.slug}
-                to={`/blogs/${post.slug}`}
-                className="group flex flex-col rounded-2xl border border-border bg-card hover:border-primary/40 hover:-translate-y-1 transition-all duration-300 overflow-hidden"
-              >
-                <div className="relative aspect-[16/9] bg-gradient-to-br from-primary/15 via-primary/5 to-transparent border-b border-border flex items-center justify-center overflow-hidden">
-                  <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,hsl(var(--primary)/0.18),transparent_70%)]" />
-                  <span className="relative text-5xl font-black text-primary/30 tracking-tight px-6 text-center">
-                    {post.category}
-                  </span>
-                </div>
-                <div className="p-6 flex flex-col flex-1">
-                  <div className="flex flex-wrap gap-2 mb-3">
-                    {post.tags.slice(0, 3).map((tag) => (
-                      <span
-                        key={tag}
-                        className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-muted text-muted-foreground"
-                      >
-                        {tag}
+            <div className="grid md:grid-cols-2 gap-6">
+              {rest.map((post) => (
+                <Link
+                  key={post.slug}
+                  to={`/blog/${post.slug}`}
+                  className="group flex flex-col rounded-2xl border border-border bg-card hover:border-primary/40 hover:-translate-y-1 transition-all duration-300 overflow-hidden"
+                >
+                  <div className="relative aspect-[16/9] bg-gradient-to-br from-primary/15 via-primary/5 to-transparent border-b border-border flex items-center justify-center overflow-hidden">
+                    <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,hsl(var(--primary)/0.18),transparent_70%)]" />
+                    <span className="relative text-5xl font-black text-primary/30 tracking-tight px-6 text-center">
+                      {post.category}
+                    </span>
+                  </div>
+                  <div className="p-6 flex flex-col flex-1">
+                    <div className="flex flex-wrap gap-2 mb-3">
+                      {post.tags.slice(0, 3).map((tag) => (
+                        <span
+                          key={tag}
+                          className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-muted text-muted-foreground"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                    <h3 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors leading-snug">
+                      {post.title}
+                    </h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed mb-6 flex-1">
+                      {post.excerpt}
+                    </p>
+                    <div className="flex items-center justify-between text-xs text-muted-foreground pt-4 border-t border-border">
+                      <span className="flex items-center gap-1.5">
+                        <Clock className="w-3.5 h-3.5" /> {post.readTime}
                       </span>
-                    ))}
+                      <span className="flex items-center gap-1 text-primary font-semibold group-hover:gap-2 transition-all">
+                        Read <ArrowRight className="w-3.5 h-3.5" />
+                      </span>
+                    </div>
                   </div>
-                  <h3 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors leading-snug">
-                    {post.title}
-                  </h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed mb-6 flex-1">
-                    {post.excerpt}
-                  </p>
-                  <div className="flex items-center justify-between text-xs text-muted-foreground pt-4 border-t border-border">
-                    <span className="flex items-center gap-1.5">
-                      <Clock className="w-3.5 h-3.5" /> {post.readTime}
-                    </span>
-                    <span className="flex items-center gap-1 text-primary font-semibold group-hover:gap-2 transition-all">
-                      Read <ArrowRight className="w-3.5 h-3.5" />
-                    </span>
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </section>
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
       </main>
 
       <Footer />

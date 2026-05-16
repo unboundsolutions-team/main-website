@@ -28,7 +28,7 @@ const Footer = () => {
       { label: "About Us", href: "/about" },
       { label: "Contact", href: "/contact" },
       { label: "Careers", href: "/#" },
-      { label: "Blog", href: "/blog" },
+      { label: "Blogs", href: "/blogs" },
     ],
     legal: [
       { label: "Privacy Policy", href: "/privacy-policy" },

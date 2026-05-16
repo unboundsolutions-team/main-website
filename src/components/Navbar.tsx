@@ -9,7 +9,7 @@ const navLinks: NavLink[] = [
   { label: "Divisions", href: "/#divisions", type: "anchor" },
   { label: "Services", href: "/#services", type: "anchor" },
   { label: "Products", href: "/#products", type: "anchor" },
-  { label: "Blog", href: "/blog", type: "route" },
+  { label: "Blogs", href: "/blogs", type: "route" },
   { label: "About", href: "/about", type: "route" },
   { label: "Contact", href: "/contact", type: "route" },
 ];
