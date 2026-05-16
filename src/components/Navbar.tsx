@@ -29,7 +29,6 @@ const Navbar = () => {
   useEffect(() => {
     // Check initial theme
     setIsDark(document.documentElement.classList.contains("dark"));
-    setIsDark(isDarkMode);
   }, []);
 
   const toggleDarkMode = () => {
