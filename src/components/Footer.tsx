@@ -1,9 +1,11 @@
 import { Linkedin, Twitter, Instagram, Github } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import unboundLogo from "@/assets/unbound-logo.png";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
+  const location = useLocation();
+  const isOnHome = location.pathname === "/";
 
   const footerLinks = {
     divisions: [
@@ -18,15 +20,22 @@ const Footer = () => {
       { label: "Cybersecurity", href: "/#services" },
     ],
     products: [
-      { label: "Shopify Auditor", href: "/#products", external: false },
-      { label: "PDF Tools", href: "/#products", external: false },
-      { label: "SIP Calculator", href: "/#products", external: false },
+      { label: "Shopify Auditor", href: "/#products" },
+      { label: "PDF Tools", href: "/#products" },
+      { label: "SIP Calculator", href: "/#products" },
     ],
     company: [
-      { label: "About me", href: "/#about" },
-      { label: "Contact", href: "/#contact" },
+      { label: "About Us", href: "/about" },
+      { label: "Contact", href: "/contact" },
       { label: "Careers", href: "/#" },
       { label: "Blog", href: "/blog" },
+    ],
+    legal: [
+      { label: "Privacy Policy", href: "/privacy-policy" },
+      { label: "Terms of Service", href: "/terms-of-service" },
+      { label: "Refund Policy", href: "/refund-policy" },
+      { label: "Cookie Policy", href: "/cookie-policy" },
+      { label: "Imprint", href: "/imprint" },
     ],
   };
 
@@ -37,22 +46,28 @@ const Footer = () => {
     { icon: Github, href: "#", label: "GitHub" },
   ];
 
-  const renderLink = (link: { label: string; href: string }) =>
-    link.href.startsWith("/") && !link.href.includes("#") ? (
+  const renderLink = (link: { label: string; href: string }) => {
+    const isAnchorOnHome = link.href.startsWith("/#");
+    if (isAnchorOnHome && isOnHome) {
+      return (
+        <a
+          href={link.href.replace("/", "")}
+          className="text-muted-foreground hover:text-primary transition-colors text-sm"
+        >
+          {link.label}
+        </a>
+      );
+    }
+    return (
       <Link
         to={link.href}
         className="text-muted-foreground hover:text-primary transition-colors text-sm"
       >
         {link.label}
       </Link>
-    ) : (
-      <a
-        href={link.href}
-        className="text-muted-foreground hover:text-primary transition-colors text-sm"
-      >
-        {link.label}
-      </a>
+
     );
+  };
 
   return (
     <footer className="py-16 border-t border-border bg-card">
@@ -124,22 +139,19 @@ const Footer = () => {
 
         {/* Bottom */}
         <div className="pt-8 border-t border-border flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-sm text-muted-foreground">
+          <p className="text-sm text-muted-foreground text-center md:text-left">
             © {currentYear} Unbound. All rights reserved.
           </p>
-          <div className="flex gap-6">
-            <Link
-              to="/privacy-policy"
-              className="text-sm text-muted-foreground hover:text-primary transition-colors"
-            >
-              Privacy Policy
-            </Link>
-            <Link
-              to="/terms-of-service"
-              className="text-sm text-muted-foreground hover:text-primary transition-colors"
-            >
-              Terms of Service
-            </Link>
+          <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
+            {footerLinks.legal.map((link) => (
+              <Link
+                key={link.label}
+                to={link.href}
+                className="text-sm text-muted-foreground hover:text-primary transition-colors"
+              >
+                {link.label}
+              </Link>
+            ))}
             <button
               onClick={() => window.dispatchEvent(new Event("open-cookie-settings"))}
               className="text-sm text-muted-foreground hover:text-primary transition-colors"

@@ -1,33 +1,34 @@
 import { useState, useEffect } from "react";
 import { Menu, X, Moon, Sun } from "lucide-react";
+import { Link, useLocation } from "react-router-dom";
 import logoFull from "@/assets/logo-full.png";
 
-const navLinks = [
-{ href: "#home", label: "Home" },
-{ href: "#divisions", label: "Divisions" },
-{ href: "#services", label: "Services" },
-{ href: "#products", label: "Products" },
-{ href: "#about", label: "About Us" },
-{ href: "blogs", label: "Blogs" },
-{ href: "#contact", label: "Contact" }];
-
+type NavLink = { label: string; href: string; type: "route" | "anchor" };
+const navLinks: NavLink[] = [
+  { label: "Home", href: "/", type: "route" },
+  { label: "Divisions", href: "/#divisions", type: "anchor" },
+  { label: "Services", href: "/#services", type: "anchor" },
+  { label: "Products", href: "/#products", type: "anchor" },
+  { label: "Blog", href: "/blog", type: "route" },
+  { label: "About", href: "/about", type: "route" },
+  { label: "Contact", href: "/contact", type: "route" },
+];
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isDark, setIsDark] = useState(false);
+  const location = useLocation();
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
+    const handleScroll = () => setIsScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   useEffect(() => {
     // Check initial theme
-    const isDarkMode = document.documentElement.classList.contains("dark");
+    setIsDark(document.documentElement.classList.contains("dark"));
     setIsDark(isDarkMode);
   }, []);
 
@@ -39,12 +40,36 @@ const Navbar = () => {
     document.documentElement.classList.add("theme-transition");
     document.documentElement.classList.toggle("dark", newDark);
 
-    // Remove transition class after animation completes
-    setTimeout(() => {
-      document.documentElement.classList.remove("theme-transition");
-    }, 300);
+    setTimeout(() => document.documentElement.classList.remove("theme-transition"), 300);
   };
-
+  const renderLink = (link: NavLink, onClick?: () => void, className?: string) => {
+    if (link.type === "route") {
+      return (
+        <Link key={link.href} to={link.href} onClick={onClick} className={className}>
+          {link.label}
+        </Link>
+      );
+    }
+    // Anchor link → if on home, plain anchor for smooth scroll; otherwise navigate to /#anchor
+    const isOnHome = location.pathname === "/";
+    if (isOnHome) {
+      const hash = link.href.replace("/", "");
+      return (
+        <a key={link.href} href={hash} onClick={onClick} className={className}>
+          {link.label}
+        </a>
+      );
+    }
+    return (
+      <Link key={link.href} to={link.href} onClick={onClick} className={className}>
+        {link.label}
+      </Link>
+    );
+  };
+  const desktopLinkClass =
+    "text-muted-foreground hover:text-foreground hover:bg-background/80 transition-all duration-300 text-sm font-medium px-4 py-2 rounded-full relative group";
+  const mobileLinkClass =
+    "text-muted-foreground hover:text-foreground hover:bg-muted transition-all duration-300 text-sm font-medium py-3 px-4 rounded-xl";
   return (
     <nav
       className="fixed top-0 left-0 right-0 z-50 flex justify-center px-4 pt-4"
@@ -52,42 +77,35 @@ const Navbar = () => {
 
       {/* Floating center-aligned navbar */}
       <div
-        className={`flex items-center gap-2 transition-all duration-500 ${
-        isScrolled ?
-        "bg-background/80 backdrop-blur-2xl border border-border/50 shadow-lg rounded-full px-3 py-2 border border-white/50" :
-        "bg-background/40 backdrop-blur-xl border border-border/30 rounded-full px-3 py-2 border border-white/50"}`
-        }>
+        className={`flex items-center gap-2 transition-all duration-500 ${isScrolled
+          ? "bg-background/80 backdrop-blur-2xl border border-border/50 shadow-lg rounded-full px-3 py-2"
+          : "bg-background/40 backdrop-blur-xl border border-border/30 rounded-full px-3 py-2"
+          }`}
+      >
+        <Link to="/" className="flex items-center hover:opacity-90 transition-opacity px-3">
 
-        {/* Logo */}
-        <a
-  href="#home"
-  className="flex items-center px-3"
->
-  <img
-    src={logoFull}
-    alt="Unbound Solutions Logo"
-    className="h-10 w-auto"
-  />
-</a>
-
+          {/* Logo */}
+          <a
+            href="#home"
+            className="flex items-center px-3"
+          >
+            <img
+              src={logoFull}
+              alt="Unbound Solutions Logo"
+              className="h-10 w-auto"
+            />
+          </a>
+        </Link>
         {/* Desktop Navigation - Center Links */}
-        <div className="hidden md:flex items-center">
+        <div className="hidden lg:flex items-center">
           <div className="flex items-center bg-muted/50 rounded-full px-1 py-1">
-            {navLinks.map((link) =>
-            <a
-              key={link.href}
-              href={link.href}
-              className="text-muted-foreground hover:text-foreground hover:bg-background/80 transition-all duration-300 text-sm font-medium px-4 py-2 rounded-full relative group">
-
-                {link.label}
-              </a>
-            )}
+            {navLinks.map((link) => renderLink(link, undefined, desktopLinkClass))}
           </div>
         </div>
 
         {/* Right side actions */}
-        <div className="hidden md:flex items-center gap-2 ml-2">
-      
+        <div className="hidden lg:flex items-center gap-2 ml-2">
+
 
           <a href="#contact" className="btn-primary text-sm !py-2 !px-4">
             Get Started
@@ -96,7 +114,7 @@ const Navbar = () => {
 
         {/* Mobile Menu Button */}
         <div className="md:hidden flex items-center gap-2">
-          
+
           <button
             onClick={() => setIsOpen(!isOpen)}
             className="text-foreground p-2 rounded-full hover:bg-muted transition-colors">
@@ -108,22 +126,22 @@ const Navbar = () => {
 
       {/* Mobile Navigation Dropdown */}
       {isOpen &&
-      <div className="md:hidden fixed top-20 left-4 right-4 bg-background/95 backdrop-blur-2xl border border-border/50 rounded-2xl shadow-xl animate-fade-in overflow-hidden">
+        <div className="md:hidden fixed top-20 left-4 right-4 bg-background/95 backdrop-blur-2xl border border-border/50 rounded-2xl shadow-xl animate-fade-in overflow-hidden">
           <div className="p-4 flex flex-col gap-2">
             {navLinks.map((link) =>
-          <a
-            key={link.href}
-            href={link.href}
-            onClick={() => setIsOpen(false)}
-            className="text-muted-foreground hover:text-foreground hover:bg-muted transition-all duration-300 text-sm font-medium py-3 px-4 rounded-xl">
+              <a
+                key={link.href}
+                href={link.href}
+                onClick={() => setIsOpen(false)}
+                className="text-muted-foreground hover:text-foreground hover:bg-muted transition-all duration-300 text-sm font-medium py-3 px-4 rounded-xl">
 
                 {link.label}
               </a>
-          )}
+            )}
             <a
-            href="#contact"
-            onClick={() => setIsOpen(false)}
-            className="btn-primary text-center mt-2">
+              href="#contact"
+              onClick={() => setIsOpen(false)}
+              className="btn-primary text-center mt-2">
 
               Get Started
             </a>
