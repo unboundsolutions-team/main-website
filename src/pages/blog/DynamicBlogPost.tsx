@@ -2,8 +2,9 @@ import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import BlogContent from "@/components/blog/BlogContent";
 import { supabase } from "@/integrations/supabase/client";
-import { Calendar, Clock, User, ArrowLeft, ArrowRight, Loader2, Share2 } from "lucide-react";
+import { Calendar, Clock, ArrowLeft, ArrowRight, Loader2, Share2 } from "lucide-react";
 
 interface Blog {
   id: string;
@@ -94,7 +95,7 @@ const DynamicBlogPost = () => {
           <p className="text-muted-foreground mb-6">
             The article you're looking for doesn't exist or has been removed.
           </p>
-          <Link to="/blog" className="text-primary font-semibold inline-flex items-center gap-2">
+          <Link to="/blogs" className="text-primary font-semibold inline-flex items-center gap-2">
             <ArrowLeft className="w-4 h-4" /> Back to blog
           </Link>
         </main>
@@ -118,39 +119,39 @@ const DynamicBlogPost = () => {
         <section className="relative overflow-hidden border-b border-border">
           <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-background to-background pointer-events-none" />
           <div className="absolute inset-0 mesh-bg opacity-60 pointer-events-none" />
-          <div className="relative container mx-auto px-6 py-14 md:py-20 max-w-4xl">
+          <div className="relative container mx-auto px-6 py-14 md:py-24 max-w-7xl">
             <Link
-              to="/blog"
-              className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary mb-8 transition-colors"
+              to="/blogs"
+              className="inline-flex items-center gap-2 text-base text-muted-foreground hover:text-primary mb-10 transition-colors"
             >
               <ArrowLeft className="w-4 h-4" /> Back to all articles
             </Link>
 
             <div className="flex flex-wrap gap-2 mb-6">
-              <span className="text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full bg-primary text-primary-foreground">
+              <span className="text-[11px] font-bold uppercase tracking-widest px-5 py-2 rounded-full bg-primary text-primary-foreground">
                 {blog.category}
               </span>
               {blog.tags.slice(0, 4).map((t) => (
                 <span
                   key={t}
-                  className="text-[10px] font-semibold uppercase tracking-widest px-3 py-1 rounded-full bg-muted text-muted-foreground border border-border"
+                  className="text-[11px] font-semibold uppercase tracking-widest px-5 py-2 rounded-full bg-muted/70 text-muted-foreground border border-border"
                 >
                   {t}
                 </span>
               ))}
             </div>
 
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.1] mb-6 text-balance">
+            <h1 className="max-w-6xl text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.04] mb-7 text-balance">
               {blog.title}
             </h1>
-            <p className="text-lg md:text-xl text-muted-foreground leading-relaxed max-w-3xl">
+            <p className="text-xl md:text-2xl text-muted-foreground leading-relaxed max-w-5xl">
               {blog.excerpt}
             </p>
 
-            <div className="flex flex-wrap items-center justify-between gap-6 mt-10 pt-6 border-t border-border">
-              <div className="flex flex-wrap items-center gap-5 text-sm text-muted-foreground">
+            <div className="flex flex-wrap items-center justify-between gap-6 mt-14 pt-8 border-t border-border">
+              <div className="flex flex-wrap items-center gap-6 text-base text-muted-foreground">
                 <span className="flex items-center gap-2">
-                  <span className="w-9 h-9 rounded-full bg-gradient-primary text-primary-foreground flex items-center justify-center text-xs font-bold">
+                  <span className="w-12 h-12 rounded-full bg-gradient-primary text-primary-foreground flex items-center justify-center text-sm font-bold">
                     {blog.author
                       .split(" ")
                       .map((w) => w[0])
@@ -177,43 +178,14 @@ const DynamicBlogPost = () => {
         </section>
 
         {/* ARTICLE BODY */}
-        <article className="container mx-auto px-6 max-w-3xl py-12 md:py-16">
-          <div
-            className="
-              prose prose-base md:prose-lg max-w-none dark:prose-invert
-              prose-headings:font-bold prose-headings:tracking-tight prose-headings:text-foreground prose-headings:scroll-mt-28
-              prose-h1:text-3xl md:prose-h1:text-4xl prose-h1:mt-0 prose-h1:mb-6
-              prose-h2:text-2xl md:prose-h2:text-3xl prose-h2:mt-12 prose-h2:mb-4 prose-h2:pb-2 prose-h2:border-b prose-h2:border-border
-              prose-h3:text-xl md:prose-h3:text-2xl prose-h3:mt-10 prose-h3:mb-3
-              prose-h4:text-lg prose-h4:mt-8 prose-h4:mb-2
-              prose-h5:text-base prose-h5:font-semibold prose-h5:mt-6 prose-h5:mb-2
-              prose-h6:text-sm prose-h6:uppercase prose-h6:tracking-widest prose-h6:text-muted-foreground prose-h6:mt-6 prose-h6:mb-2
-              prose-p:text-foreground/85 prose-p:leading-[1.8] prose-p:my-5
-              prose-a:text-primary prose-a:font-medium prose-a:no-underline hover:prose-a:underline prose-a:underline-offset-4
-              prose-strong:text-foreground prose-strong:font-semibold
-              prose-em:text-foreground/90
-              prose-ul:my-5 prose-ul:pl-6 prose-ul:space-y-2
-              prose-ol:my-5 prose-ol:pl-6 prose-ol:space-y-2
-              prose-li:text-foreground/85 prose-li:leading-relaxed prose-li:marker:text-primary
-              prose-blockquote:not-italic prose-blockquote:border-l-4 prose-blockquote:border-primary prose-blockquote:bg-primary/5 prose-blockquote:px-6 prose-blockquote:py-4 prose-blockquote:rounded-r-xl prose-blockquote:my-8 prose-blockquote:text-foreground prose-blockquote:font-medium
-              prose-img:rounded-2xl prose-img:shadow-card prose-img:border prose-img:border-border prose-img:my-8 prose-img:w-full
-              prose-figure:my-8 prose-figcaption:text-center prose-figcaption:text-sm prose-figcaption:text-muted-foreground prose-figcaption:mt-2
-              prose-code:bg-muted prose-code:text-foreground prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-[0.9em] prose-code:font-mono prose-code:font-medium prose-code:before:content-none prose-code:after:content-none
-              prose-pre:bg-card prose-pre:border prose-pre:border-border prose-pre:rounded-xl prose-pre:p-5 prose-pre:my-6 prose-pre:overflow-x-auto prose-pre:shadow-soft
-              prose-pre:[&_code]:bg-transparent prose-pre:[&_code]:p-0 prose-pre:[&_code]:text-foreground
-              prose-hr:my-12 prose-hr:border-border
-              prose-table:my-8 prose-table:w-full prose-table:border-collapse prose-table:overflow-hidden prose-table:rounded-xl prose-table:border prose-table:border-border prose-table:text-sm
-              prose-thead:bg-muted/60
-              prose-th:px-4 prose-th:py-3 prose-th:text-left prose-th:font-semibold prose-th:text-foreground prose-th:border-b prose-th:border-border
-              prose-td:px-4 prose-td:py-3 prose-td:border-b prose-td:border-border/60 prose-td:text-foreground/85
-              [&_table]:block [&_table]:overflow-x-auto
-            "
-            dangerouslySetInnerHTML={{ __html: blog.content }}
-          />
+        <article className="container mx-auto px-6 max-w-7xl py-14 md:py-20">
+          <div className="w-full">
+            <BlogContent html={blog.content} />
+          </div>
 
           {/* Tag footer */}
           {blog.tags.length > 0 && (
-            <div className="mt-12 pt-8 border-t border-border">
+            <div className="w-full mt-12 pt-8 border-t border-border">
               <div className="flex flex-wrap items-center gap-2">
                 <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mr-2">
                   Tagged:
@@ -231,7 +203,7 @@ const DynamicBlogPost = () => {
           )}
 
           {/* Author card */}
-          <div className="mt-10 rounded-2xl border border-border bg-card p-6 md:p-8 flex flex-col sm:flex-row items-start gap-5 shadow-soft">
+          <div className="w-full mt-10 rounded-2xl border border-border bg-card p-6 md:p-8 flex flex-col sm:flex-row items-start gap-5 shadow-soft">
             <div className="w-14 h-14 rounded-2xl bg-gradient-primary text-primary-foreground flex items-center justify-center text-base font-bold shrink-0">
               {blog.author
                 .split(" ")
@@ -254,7 +226,7 @@ const DynamicBlogPost = () => {
 
         {/* RELATED */}
         {related.length > 0 && (
-          <section className="container mx-auto px-6 max-w-5xl py-12 md:py-16 border-t border-border">
+          <section className="container mx-auto px-6 max-w-7xl py-12 md:py-16 border-t border-border">
             <div className="flex items-end justify-between mb-8">
               <h2 className="text-2xl md:text-3xl font-bold">Keep reading</h2>
               <Link
@@ -296,7 +268,7 @@ const DynamicBlogPost = () => {
         )}
 
         {/* CTA */}
-        <section className="container mx-auto px-6 max-w-4xl mt-8">
+        <section className="container mx-auto px-6 max-w-7xl mt-8">
           <div className="relative overflow-hidden rounded-3xl border border-primary/30 bg-gradient-to-br from-primary/10 via-card to-card p-8 md:p-12 text-center shadow-card">
             <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,hsl(var(--primary)/0.18),transparent_60%)] pointer-events-none" />
             <div className="relative">

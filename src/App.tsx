@@ -30,34 +30,36 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
-
           <Route path="/" element={<Index />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
+
           {/* Legal */}
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/terms-of-service" element={<TermsOfService />} />
           <Route path="/refund-policy" element={<RefundPolicy />} />
           <Route path="/cookie-policy" element={<CookiePolicy />} />
-            <Route path="/imprint" element={<Imprint />} />
+          <Route path="/imprint" element={<Imprint />} />
 
-            <Route path="/blogs" element={<Blog />} />
+          <Route path="/blogs" element={<Blog />} />
+          <Route path="/blog" element={<Navigate to="/blogs" replace />} />
 
-            {/* Auth */}
-            <Route path="/login" element={<Login />} />
-            <Route path="/admin/login" element={<Navigate to="/login" replace />} />
-            <Route path="/forgot-password" element={<ForgotPassword />} />
-            <Route path="/reset-password" element={<ResetPassword />} />
+          {/* Auth */}
+          <Route path="/login" element={<Login />} />
+          <Route path="/admin/login" element={<Navigate to="/login" replace />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
 
-            {/* Admin */}
-            <Route path="/admin" element={<AdminDashboard />} />
+          {/* Admin */}
+          <Route path="/admin" element={<AdminDashboard />} />
 
-            {/* Dynamic DB-backed blog posts (must be last among /blog/* routes) */}
-            <Route path="/blog/:slug" element={<DynamicBlogPost />} />
+          {/* Dynamic DB-backed blog posts (must be last among /blog/* routes) */}
+          <Route path="/blog/:slug" element={<DynamicBlogPost />} />
 
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
+          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+          <Route path="*" element={<NotFound />} />
         </Routes>
+        <CookieConsent />
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

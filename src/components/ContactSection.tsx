@@ -69,7 +69,7 @@ const ContactSection = () => {
       icon: Mail,
       label: "Email Us",
       value: "info@unboundsolutions.in",
-      href: "mailto:your@email.com",
+      href: "mailto:info@unboundsolutions.in",
     },
 
     {

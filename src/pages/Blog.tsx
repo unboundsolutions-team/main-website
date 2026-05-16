@@ -14,7 +14,14 @@ interface ListPost {
   date: string;
   author: string;
   tags: string[];
+  imageUrl?: string;
 }
+
+const getFirstImageFromHtml = (html?: string) => {
+  if (!html || typeof window === "undefined") return undefined;
+  const doc = new DOMParser().parseFromString(html, "text/html");
+  return doc.querySelector("img")?.getAttribute("src") || undefined;
+};
 
 const Blog = () => {
   const [posts, setPosts] = useState<ListPost[]>([]);
@@ -36,7 +43,7 @@ const Blog = () => {
     (async () => {
       const { data, error } = await supabase
         .from("blogs")
-        .select("slug, title, excerpt, category, read_time, author, tags, created_at")
+        .select("slug, title, excerpt, content, category, read_time, author, tags, created_at")
         .eq("published", true)
         .order("created_at", { ascending: false });
 
@@ -54,6 +61,7 @@ const Blog = () => {
             }),
             author: d.author,
             tags: d.tags ?? [],
+            imageUrl: getFirstImageFromHtml(d.content),
           })),
         );
       }
@@ -70,8 +78,8 @@ const Blog = () => {
 
       <main className="pt-32 pb-20">
         {/* Header */}
-        <section className="container mx-auto px-6 mb-16">
-          <div className="max-w-3xl">
+        <section className="container mx-auto px-6 mb-16 max-w-7xl">
+          <div className="max-w-4xl">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-semibold uppercase tracking-widest mb-6">
               <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
               The Unbound Blog
@@ -106,14 +114,26 @@ const Blog = () => {
           <section className="container mx-auto px-6 mb-16">
             <Link
               to={`/blog/${featured.slug}`}
-              className="group block rounded-3xl border border-border bg-card hover:border-primary/40 transition-all duration-300 overflow-hidden"
+              className="group block rounded-3xl border border-border bg-card hover:border-primary/40 hover:-translate-y-1 transition-all duration-300 overflow-hidden shadow-card"
             >
               <div className="grid md:grid-cols-2 gap-8 p-8 md:p-12">
                 <div className="relative aspect-[4/3] md:aspect-auto rounded-2xl bg-gradient-to-br from-primary/20 via-primary/5 to-transparent border border-primary/20 flex items-center justify-center overflow-hidden">
-                  <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,hsl(var(--primary)/0.25),transparent_60%)]" />
-                  <span className="relative text-5xl md:text-6xl font-black text-primary/30 tracking-tight px-6 text-center">
-                    {featured.category}
-                  </span>
+                  {featured.imageUrl ? (
+                    <img
+                      src={featured.imageUrl}
+                      alt=""
+                      className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <>
+                      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,hsl(var(--primary)/0.25),transparent_60%)]" />
+                      <span className="relative text-5xl md:text-6xl font-black text-primary/30 tracking-tight px-6 text-center">
+                        {featured.category}
+                      </span>
+                    </>
+                  )}
+                  <div className="absolute inset-0 bg-gradient-to-t from-background/65 via-transparent to-transparent" />
                 </div>
                 <div className="flex flex-col justify-center">
                   <div className="flex items-center gap-3 text-xs font-semibold uppercase tracking-wider text-primary mb-4">
@@ -155,7 +175,7 @@ const Blog = () => {
               </span>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-6">
+            <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
               {rest.map((post) => (
                 <Link
                   key={post.slug}
@@ -163,10 +183,22 @@ const Blog = () => {
                   className="group flex flex-col rounded-2xl border border-border bg-card hover:border-primary/40 hover:-translate-y-1 transition-all duration-300 overflow-hidden"
                 >
                   <div className="relative aspect-[16/9] bg-gradient-to-br from-primary/15 via-primary/5 to-transparent border-b border-border flex items-center justify-center overflow-hidden">
-                    <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,hsl(var(--primary)/0.18),transparent_70%)]" />
-                    <span className="relative text-5xl font-black text-primary/30 tracking-tight px-6 text-center">
-                      {post.category}
-                    </span>
+                    {post.imageUrl ? (
+                      <img
+                        src={post.imageUrl}
+                        alt=""
+                        className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        loading="lazy"
+                      />
+                    ) : (
+                      <>
+                        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,hsl(var(--primary)/0.18),transparent_70%)]" />
+                        <span className="relative text-4xl font-black text-primary/30 tracking-tight px-6 text-center">
+                          {post.category}
+                        </span>
+                      </>
+                    )}
+                    <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-background/70 to-transparent" />
                   </div>
                   <div className="p-6 flex flex-col flex-1">
                     <div className="flex flex-wrap gap-2 mb-3">

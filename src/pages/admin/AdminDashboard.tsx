@@ -206,7 +206,7 @@ const AdminDashboard = () => {
               {user?.email}
             </span>
             <Button variant="outline" size="sm" asChild>
-              <Link to="/blog">
+              <Link to="/blogs">
                 <ExternalLink className="w-4 h-4" />
                 <span className="hidden sm:inline">View blog</span>
               </Link>

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Menu, X, Moon, Sun } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import logoFull from "@/assets/logo-full.png";
 
@@ -16,7 +16,6 @@ const navLinks: NavLink[] = [
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [isDark, setIsDark] = useState(false);
   const location = useLocation();
   const [isScrolled, setIsScrolled] = useState(false);
 
@@ -26,21 +25,6 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  useEffect(() => {
-    // Check initial theme
-    setIsDark(document.documentElement.classList.contains("dark"));
-  }, []);
-
-  const toggleDarkMode = () => {
-    const newDark = !isDark;
-    setIsDark(newDark);
-
-    // Add transition class for smooth theme change
-    document.documentElement.classList.add("theme-transition");
-    document.documentElement.classList.toggle("dark", newDark);
-
-    setTimeout(() => document.documentElement.classList.remove("theme-transition"), 300);
-  };
   const renderLink = (link: NavLink, onClick?: () => void, className?: string) => {
     if (link.type === "route") {
       return (
@@ -82,18 +66,11 @@ const Navbar = () => {
           }`}
       >
         <Link to="/" className="flex items-center hover:opacity-90 transition-opacity px-3">
-
-          {/* Logo */}
-          <a
-            href="#home"
-            className="flex items-center px-3"
-          >
-            <img
-              src={logoFull}
-              alt="Unbound Solutions Logo"
-              className="h-10 w-auto"
-            />
-          </a>
+          <img
+            src={logoFull}
+            alt="Unbound Solutions Logo"
+            className="h-10 w-auto"
+          />
         </Link>
         {/* Desktop Navigation - Center Links */}
         <div className="hidden lg:flex items-center">
@@ -106,9 +83,9 @@ const Navbar = () => {
         <div className="hidden lg:flex items-center gap-2 ml-2">
 
 
-          <a href="#contact" className="btn-primary text-sm !py-2 !px-4">
+          <Link to="/contact" className="btn-primary text-sm !py-2 !px-4">
             Get Started
-          </a>
+          </Link>
         </div>
 
         {/* Mobile Menu Button */}
@@ -128,22 +105,15 @@ const Navbar = () => {
         <div className="md:hidden fixed top-20 left-4 right-4 bg-background/95 backdrop-blur-2xl border border-border/50 rounded-2xl shadow-xl animate-fade-in overflow-hidden">
           <div className="p-4 flex flex-col gap-2">
             {navLinks.map((link) =>
-              <a
-                key={link.href}
-                href={link.href}
-                onClick={() => setIsOpen(false)}
-                className="text-muted-foreground hover:text-foreground hover:bg-muted transition-all duration-300 text-sm font-medium py-3 px-4 rounded-xl">
-
-                {link.label}
-              </a>
+              renderLink(link, () => setIsOpen(false), mobileLinkClass)
             )}
-            <a
-              href="#contact"
+            <Link
+              to="/contact"
               onClick={() => setIsOpen(false)}
               className="btn-primary text-center mt-2">
 
               Get Started
-            </a>
+            </Link>
           </div>
         </div>
       }
